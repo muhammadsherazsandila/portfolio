@@ -84,7 +84,7 @@ function Navbar() {
             className="font-bold text-xl md:text-2xl"
           >
             <span className="text-cyan-500">MS </span>
-            <span className="dark:text-white text-gray-900">Developer</span>
+            <span className="text-white">Developer</span>
           </motion.div>
 
           {/* Desktop Navigation */}
@@ -126,7 +126,7 @@ function Navbar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
-            className="md:hidden text-2xl dark:text-white text-gray-900 p-2"
+            className="md:hidden text-2xl text-white  p-2"
             onClick={() => {
               setShowMenu(true);
               document.body.style.overflow = "hidden";
