@@ -23,7 +23,6 @@ function Navbar() {
   const handleClick = (index: number) => {
     setActiveLink(index);
     setShowMenu(false);
-    document.body.style.overflow = "auto";
   };
 
   // Handle scroll effect
@@ -152,7 +151,6 @@ function Navbar() {
               className="absolute inset-0 bg-black/70 backdrop-blur-sm"
               onClick={() => {
                 setShowMenu(false);
-                document.body.style.overflow = "auto";
               }}
             />
 
