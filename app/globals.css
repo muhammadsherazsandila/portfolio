@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 
-body {
+body , html {
   font-family: "Poppins", sans-serif;
   color: white;
-  overflow-y: auto;
+  overflow-x: hidden;
+
 }
 .ripple {
   position: fixed;
