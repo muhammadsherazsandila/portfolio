@@ -5,7 +5,7 @@ import { FaArrowUp, FaMoon, FaSun } from "react-icons/fa";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
-import { translaterUpDown } from "./Animation";
+import { translaterUpDown } from "../animation/Animation";
 
 function Navbar() {
   const [activeLink, setActiveLink] = useState(0);

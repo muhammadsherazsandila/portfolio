@@ -22,7 +22,7 @@ import {
   SiRedux,
   SiNextdotjs,
 } from "react-icons/si";
-import { translater, translaterUpDown } from "./Animation";
+import { translater, translaterUpDown } from "../animation/Animation";
 
 const skills = [
   {

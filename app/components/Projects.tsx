@@ -13,7 +13,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
-import { translater, translaterUpDown } from "./Animation";
+import { translater, translaterUpDown } from "../animation/Animation";
 import { pre } from "framer-motion/client";
 
 const projects = [

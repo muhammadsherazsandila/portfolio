@@ -9,7 +9,7 @@ import {
   FaLightbulb,
   FaRocket,
 } from "react-icons/fa";
-import { translater } from "./Animation";
+import { translater } from "../animation/Animation";
 
 const containerVariants = {
   hidden: { opacity: 0 },

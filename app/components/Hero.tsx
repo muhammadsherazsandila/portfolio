@@ -9,7 +9,7 @@ import {
   FaArrowDown,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { translater } from "./Animation";
+import { translater } from "../animation/Animation";
 
 function Hero() {
   const typedRef = useRef(null);
