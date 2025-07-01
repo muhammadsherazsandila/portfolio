@@ -156,10 +156,10 @@ function Navbar() {
               }}
             />
 
-            <motion.div className="absolute right-0 top-0 bottom-0 w-4/5 max-w-sm dark:bg-gray-900 bg-white shadow-xl">
+            <motion.div className="absolute right-0 top-0 bottom-0 w-4/5 max-w-sm bg-gray-900e shadow-xl">
               <div className="p-6 flex justify-end">
                 <button
-                  className="text-2xl dark:text-white text-gray-900 p-2"
+                  className="text-2xl text-white  p-2"
                   onClick={() => {
                     setShowMenu(false);
                   }}
