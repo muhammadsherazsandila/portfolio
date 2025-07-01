@@ -146,7 +146,7 @@ function Navbar() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed inset-0 z-50 md:hidden"
+            className="absolute inset-0 z-50 md:hidden"
           >
             <div
               className="absolute inset-0 bg-black/70 backdrop-blur-sm"
