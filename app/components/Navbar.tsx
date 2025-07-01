@@ -156,7 +156,7 @@ function Navbar() {
               }}
             />
 
-            <motion.div className="absolute right-0 top-0 bottom-0 w-4/5 max-w-sm bg-gray-900e shadow-xl">
+            <motion.div className="absolute right-0 top-0 bottom-0 w-4/5 max-w-sm bg-gray-900 shadow-xl">
               <div className="p-6 flex justify-end">
                 <button
                   className="text-2xl text-white  p-2"
