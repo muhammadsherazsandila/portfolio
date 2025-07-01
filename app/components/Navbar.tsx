@@ -162,7 +162,6 @@ function Navbar() {
                   className="text-2xl dark:text-white text-gray-900 p-2"
                   onClick={() => {
                     setShowMenu(false);
-                    document.body.style.overflow = "auto";
                   }}
                   aria-label="Close menu"
                 >
