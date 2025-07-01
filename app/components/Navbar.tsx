@@ -6,6 +6,7 @@ import { motion, AnimatePresence, Variants } from "framer-motion";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { ImCross } from "react-icons/im";
 import { translaterUpDown } from "./Animation";
+import ArrowUp from "./ArrowUp";
 
 function Navbar() {
   const [activeLink, setActiveLink] = useState(0);
@@ -69,14 +70,14 @@ function Navbar() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className={`fixed w-full z-50 transition-all duration-300 ${
+        className={`absolute left-0 top-0 w-full z-50 py-4 transition-all duration-300 ${
           scrolled
-            ? "dark:bg-gray-900/90 bg-white/90 backdrop-blur-md shadow-md py-2"
-            : "dark:bg-transparent bg-transparent py-4"
+            ? "dark:bg-gray-900/90 bg-white/90 backdrop-blur-md shadow-md"
+            : "dark:bg-transparent bg-transparent"
         }`}
         id="nav"
       >
-        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-24 flex justify-between items-center">
+        <div className="mx-auto px-6 md:px-12 lg:px-24 flex justify-between items-center">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -205,25 +206,6 @@ function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Scroll to Top Button */}
-      <Link
-        onClick={() => setActiveLink(0)}
-        to="nav"
-        duration={700}
-        smooth={true}
-        className="fixed right-6 bottom-6 z-40"
-      >
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          whileHover={{ scale: 1.1 }}
-          className="p-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full shadow-lg shadow-cyan-500/30 flex items-center justify-center animate-bounce duration-200 ease-in-out cursor-pointer transition-all"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        >
-          <FaArrowUp className="text-xl" />
-        </motion.div>
-      </Link>
     </>
   );
 }
