@@ -61,10 +61,10 @@ function Summary() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#00a3e7] to-black">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#00a3e7] to-black text-center">
             Summary
           </h1>
-          <div className="h-2 w-20 mt-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full"></div>
+          <div className="h-2 w-20 mt-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full mx-auto"></div>
         </motion.div>
 
         <motion.div

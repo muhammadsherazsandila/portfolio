@@ -14,7 +14,7 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
 import { translater, translaterUpDown } from "../animation/Animation";
-import { pre } from "framer-motion/client";
+import Heading from "./Heading";
 
 const projects = [
   {
@@ -92,22 +92,10 @@ function Projects() {
       className="px-6 py-24 md:px-12 lg:px-24 bg-gradient-to-br from-gray-900 to-gray-950"
     >
       <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
-            My Projects
-          </h1>
-          <div className="h-1 w-20 mt-4 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full mx-auto"></div>
-          <p className="mt-6 text-gray-300 max-w-2xl mx-auto">
-            Explore my latest web development projects. Each one is crafted with
-            modern technologies and best practices.
-          </p>
-        </motion.div>
+        <Heading
+          title="My Projects"
+          description="Explore my latest web development projects. Each one is crafted with modern technologies and best practices."
+        />
 
         <motion.div
           variants={translaterUpDown(0, 100, 0)}
