@@ -1,64 +1,13 @@
 "use client";
-import React, { useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Navigation,
-  Pagination,
-  Autoplay,
-  EffectCoverflow,
-} from "swiper/modules";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/effect-coverflow";
-import { translater, translaterUpDown } from "../animation/Animation";
+import { motion, AnimatePresence } from "framer-motion";
 import Heading from "./Heading";
-
-const projects = [
-  {
-    title: "Blogora",
-    description: "Modern blogging platform with rich content editing",
-    imgUrl: "/Images/blogora.png",
-    siteUrl: "https://blogorablogs.vercel.app/",
-    githubUrl: "https://github.com/muhammadsherazsandila/Bloging-website",
-    tags: ["MERN", "CMS", "Authentication"],
-  },
-  {
-    title: "Roomify",
-    description: "Real-time chat application with user authentication",
-    imgUrl: "/Images/roomify.png",
-    siteUrl: "https://roomifychat.vercel.app/",
-    githubUrl: "https://github.com/muhammadsherazsandila/Chat-room", // change if actual URL differs
-    tags: ["MERN", "Socket.IO", "Real-time"],
-  },
-  {
-    title: "Trendora",
-    description:
-      "Modern e-commerce platform with a responsive UI, product cart system, and smooth user experience",
-    imgUrl: "/Images/trendora.png",
-    siteUrl: "https://trendorashop.vercel.app/",
-    githubUrl: "https://github.com/muhammadsherazsandila/Shopping-Cart-System", // update if needed
-    tags: ["E-commerce", "React", "Cart"],
-  },
-  {
-    title: "Sandila Digix",
-    description: "Modern digital agency portfolio website with animations",
-    imgUrl: "/Images/sandilaDigix.png",
-    siteUrl: "https://sandiladigix.netlify.app/",
-    githubUrl: "https://github.com/muhammadsherazsandila/SandilaDigix",
-    tags: ["React", "Tailwind", "Framer"],
-  },
-  {
-    title: "Future Programmers",
-    description: "Educational platform for aspiring developers",
-    imgUrl: "/Images/futureProgrammers.png",
-    siteUrl: "https://future-programmers.vercel.app/",
-    githubUrl: "https://github.com/muhammadsherazsandila/Future-Programmers",
-    tags: ["EJS", "MongoDB", "UI/UX"],
-  },
-];
+import { projects } from "../assets/projects";
+import Image from "next/image";
+import { translater } from "../animation/Animation";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -83,8 +32,32 @@ const itemVariants = {
 };
 
 function Projects() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [hoverActive, setHoverActive] = useState("opacity-0");
+  const [isHovering, setIsHovering] = useState(false);
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: "center",
+      skipSnaps: false,
+      duration: 45,
+    },
+    [Autoplay({ delay: 5000, stopOnInteraction: false })]
+  );
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on("select", onSelect);
+    return () => {
+      emblaApi && emblaApi.off("select", onSelect);
+    };
+  }, [emblaApi, onSelect]);
 
   return (
     <section
@@ -98,123 +71,175 @@ function Projects() {
         />
 
         <motion.div
-          variants={translaterUpDown(0, 100, 0)}
+          variants={translater(-100)}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-          className="relative"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
         >
-          <Swiper
-            effect={"coverflow"}
-            grabCursor={true}
-            centeredSlides={true}
-            loop={true}
-            slidesPerView={"auto"}
-            coverflowEffect={{
-              rotate: 0,
-              stretch: 0,
-              depth: 100,
-              modifier: 2.5,
-              slideShadows: true,
-            }}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-            }}
-            navigation={{
-              nextEl: ".swiper-button-next",
-              prevEl: ".swiper-button-prev",
-            }}
-            pagination={{
-              clickable: true,
-              el: ".swiper-pagination",
-              type: "bullets",
-            }}
-            modules={[EffectCoverflow, Navigation, Pagination, Autoplay]}
-            onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-            className="py-10"
-          >
-            {projects.map((project, index) => (
-              <SwiperSlide
-                key={index}
-                className="max-w-md rounded-xl overflow-hidden shadow-2xl"
-              >
-                <div className="relative group">
-                  <div className="overflow-hidden rounded-xl">
-                    <img
-                      src={project.imgUrl}
-                      alt={project.title}
-                      className="w-full h-64 object-cover transition-all duration-700 group-hover:scale-110"
-                    />
-                  </div>
-
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-b from-black/90 to-transparent opacity-0 ${
-                      activeIndex === index ? hoverActive : "opacity-0"
-                    } transition-opacity duration-500 flex flex-col justify-end p-6 `}
-                    onMouseEnter={() => setHoverActive("opacity-100")}
-                    onMouseLeave={() => setHoverActive("opacity-0")}
-                    onClick={() =>
-                      setHoverActive((prev) =>
-                        prev === "opacity-100" ? "opacity-0" : "opacity-100"
-                      )
-                    }
+          {/* Embla viewport */}
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+              {projects.map((project, index) => (
+                <div
+                  key={index}
+                  className="embla__slide shrink-0 basis-[85%] sm:basis-[70%] md:basis-[45%] lg:basis-[30%] px-3 py-6"
+                >
+                  <motion.div
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ duration: 0.3 }}
+                    className="relative group rounded-2xl overflow-hidden h-full border border-white/10 bg-gradient-to-br from-gray-800/30 to-gray-900/50 shadow-2xl"
                   >
-                    <h3 className="text-2xl font-bold text-white">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-200 mt-2">{project.description}</p>
+                    <div className="relative overflow-hidden rounded-2xl h-full flex flex-col">
+                      <div className="relative h-60 overflow-hidden">
+                        <Image
+                          src={project.imgUrl}
+                          alt={project.title}
+                          className="w-full h-full object-cover"
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90" />
+                      </div>
 
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {project.tags.map((tag, i) => (
-                        <span
-                          key={i}
-                          className="px-3 py-1 bg-gray-800  text-sm rounded-full"
+                      <div className="p-5 flex-1 flex flex-col">
+                        <div className="flex justify-between items-start mb-3">
+                          <h3 className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                            {project.title}
+                          </h3>
+                          <motion.div
+                            className="flex gap-2"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{
+                              opacity:
+                                selectedIndex === index || isHovering ? 1 : 0,
+                              y: selectedIndex === index || isHovering ? 0 : 10,
+                            }}
+                          >
+                            <a
+                              href={project.siteUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="p-2 bg-white/10 backdrop-blur-md rounded-full hover:bg-white/20 transition-colors"
+                              aria-label="Live demo"
+                            >
+                              <FaExternalLinkAlt className="text-cyan-300" />
+                            </a>
+                            {project.githubUrl && (
+                              <a
+                                href={project.githubUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-2 bg-white/10 backdrop-blur-md rounded-full hover:bg-white/20 transition-colors"
+                                aria-label="GitHub repository"
+                              >
+                                <FaGithub className="text-cyan-300" />
+                              </a>
+                            )}
+                          </motion.div>
+                        </div>
+
+                        <motion.p
+                          className="text-gray-300 mb-1 flex-1"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{
+                            opacity:
+                              selectedIndex === index || isHovering ? 1 : 0,
+                            y: selectedIndex === index || isHovering ? 0 : 10,
+                          }}
+                          transition={{ delay: 0.1 }}
                         >
-                          {tag}
-                        </span>
-                      ))}
+                          {project.description}
+                        </motion.p>
+
+                        <motion.div
+                          className="flex flex-wrap gap-2 mb-1"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{
+                            opacity:
+                              selectedIndex === index || isHovering ? 1 : 0,
+                            y: selectedIndex === index || isHovering ? 0 : 10,
+                          }}
+                          transition={{ delay: 0.15 }}
+                        >
+                          {project.tags.map((tag, i) => (
+                            <span
+                              key={i}
+                              className="px-3 py-1 bg-white/10 backdrop-blur-md text-xs rounded-full"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </motion.div>
+
+                        {/* <div className="flex gap-3">
+                          <a
+                            href={project.siteUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 flex items-center justify-center gap-2 py-2 bg-gradient-to-r from-cyan-600 to-blue-700 rounded-lg text-white transition-all hover:shadow-lg hover:shadow-cyan-500/20"
+                          >
+                            <FaExternalLinkAlt /> Demo
+                          </a>
+                          {project.githubUrl && (
+                            <a
+                              href={project.githubUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-white transition-all"
+                            >
+                              <FaGithub /> Code
+                            </a>
+                          )}
+                        </div> */}
+                      </div>
                     </div>
 
-                    <div className="flex gap-4 mt-6">
-                      <a
-                        href={project.siteUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-lg text-white transition-colors"
-                      >
-                        <FaExternalLinkAlt /> Live Demo
-                      </a>
-                      {project.githubUrl && (
-                        <a
-                          href={project.githubUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg text-white transition-colors"
-                        >
-                          <FaGithub /> Code
-                        </a>
-                      )}
-                    </div>
-                  </div>
+                    {/* Glow effect */}
+                    <div className="absolute inset-0 -z-10 bg-gradient-to-br from-cyan-500/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                  </motion.div>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-
-          <div className="flex justify-center mt-12">
-            <div className="swiper-pagination !relative !bottom-0"></div>
+              ))}
+            </div>
           </div>
 
-          <div className="absolute top-1/2 w-full hidden md:flex justify-between z-10 -translate-y-1/2">
-            <button className="swiper-button-prev bg-gray-800/50 hover:bg-gray-700 backdrop-blur-sm w-12 h-12 rounded-full flex items-center justify-center text-white transition-all">
+          {/* Progress bar pagination */}
+          <div className="mt-8">
+            <div className="relative h-1.5 w-full bg-gray-800 rounded-full overflow-hidden">
+              <motion.div
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-cyan-500 to-blue-600"
+                animate={{
+                  width: `${((selectedIndex + 1) / projects.length) * 100}%`,
+                }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+              />
+            </div>
+            <div className="flex justify-between mt-3 text-sm text-gray-400">
+              <span className="font-medium">
+                {projects[selectedIndex]?.title}
+              </span>
+              <span>
+                {selectedIndex + 1} / {projects.length}
+              </span>
+            </div>
+          </div>
+
+          {/* Navigation buttons */}
+          <div className="absolute top-1/2 w-full hidden md:flex justify-between z-10 -translate-y-1/2 px-2">
+            <motion.button
+              onClick={() => emblaApi?.scrollPrev()}
+              className="p-3 bg-white/10 backdrop-blur-lg rounded-full border border-white/20 hover:bg-white/20 transition-all"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              aria-label="Previous project"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-6 h-6 text-white"
               >
                 <path
                   strokeLinecap="round"
@@ -222,15 +247,21 @@ function Projects() {
                   d="M15.75 19.5L8.25 12l7.5-7.5"
                 />
               </svg>
-            </button>
-            <button className="swiper-button-next bg-gray-800/50 hover:bg-gray-700 backdrop-blur-sm w-12 h-12 rounded-full flex items-center justify-center text-white transition-all">
+            </motion.button>
+            <motion.button
+              onClick={() => emblaApi?.scrollNext()}
+              className="p-3 bg-white/10 backdrop-blur-lg rounded-full border border-white/20 hover:bg-white/20 transition-all"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              aria-label="Next project"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-6 h-6 text-white"
               >
                 <path
                   strokeLinecap="round"
@@ -238,20 +269,27 @@ function Projects() {
                   d="M8.25 4.5l7.5 7.5-7.5 7.5"
                 />
               </svg>
-            </button>
+            </motion.button>
           </div>
         </motion.div>
 
         <div className="mt-16 text-center">
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{
-              opacity: activeIndex === 0 ? 1 : 0,
-              transition: { duration: 0.3 },
-            }}
-            className="text-cyan-400 italic"
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="text-cyan-400 italic flex justify-center items-center gap-2"
           >
-            Swipe to explore more projects →
+            <span className="hidden sm:inline">Swipe</span>
+            <span className="inline sm:hidden">Tap</span>
+            to explore more projects
+            <motion.div
+              animate={{ x: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 1.5 }}
+              className="ml-2"
+            >
+              →
+            </motion.div>
           </motion.div>
         </div>
       </div>

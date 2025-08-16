@@ -12,7 +12,7 @@ function Heading({
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
+      viewport={{ once: true }}
       transition={{ duration: 0.6 }}
       className="mb-16 text-center"
     >

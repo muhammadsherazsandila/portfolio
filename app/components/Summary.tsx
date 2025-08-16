@@ -2,6 +2,7 @@
 import React from "react";
 import { motion, Variants } from "framer-motion";
 import { FaRocket, FaCogs, FaBolt } from "react-icons/fa";
+import { projects } from "../assets/projects";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -28,19 +29,19 @@ const itemVariants: Variants = {
 
 const statCards = [
   {
-    value: "+5",
+    value: projects.length + "+",
     label: "Completed Projects",
     icon: <FaRocket className="text-indigo-400" />,
     color: "from-indigo-900/30 to-indigo-700/20",
   },
   {
-    value: "+10",
+    value: "10+",
     label: "Master Skills",
     icon: <FaCogs className="text-emerald-400" />,
     color: "from-emerald-900/30 to-emerald-700/20",
   },
   {
-    value: "+4",
+    value: "4+",
     label: "Coming Soon",
     icon: <FaBolt className="text-amber-400" />,
     color: "from-amber-900/30 to-amber-700/20",
