@@ -2,7 +2,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
+import {
+  FaArrowLeft,
+  FaArrowRight,
+  FaChevronLeft,
+  FaChevronRight,
+  FaExternalLinkAlt,
+  FaGithub,
+} from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import Heading from "./Heading";
 import { projects } from "../assets/projects";
@@ -44,10 +51,23 @@ function Projects() {
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+  const scrollPrev = useCallback(
+    () => emblaApi && emblaApi.scrollPrev(),
+    [emblaApi]
+  );
+  const scrollNext = useCallback(
+    () => emblaApi && emblaApi.scrollNext(),
+    [emblaApi]
+  );
 
   const onSelect = useCallback(() => {
     if (!emblaApi) return;
     setSelectedIndex(emblaApi.selectedScrollSnap());
+
+    setPrevBtnDisabled(!emblaApi.canScrollPrev());
+    setNextBtnDisabled(!emblaApi.canScrollNext());
   }, [emblaApi]);
 
   useEffect(() => {
@@ -78,7 +98,7 @@ function Projects() {
           onMouseLeave={() => setIsHovering(false)}
         >
           {/* Embla viewport */}
-          <div className="overflow-hidden" ref={emblaRef}>
+          <div className="relative overflow-hidden" ref={emblaRef}>
             <div className="flex">
               {projects.map((project, index) => (
                 <div
@@ -199,6 +219,38 @@ function Projects() {
                     <div className="absolute inset-0 -z-10 bg-gradient-to-br from-cyan-500/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
                   </motion.div>
                 </div>
+              ))}
+            </div>
+
+            {/* Navigation buttons */}
+            <button
+              onClick={scrollPrev}
+              className="absolute left-4 top-5/6 md:top-1/2 z-20 p-3 bg-white/10 backdrop-blur-[0.2px] text-white cursor-pointer rounded-full hover:bg-white/20 transition-all transform -translate-y-1/2"
+              aria-label="Previous slide"
+            >
+              <FaChevronLeft size={24} />
+            </button>
+            <button
+              onClick={scrollNext}
+              className="absolute right-4 top-5/6 md:top-1/2 z-20 p-3 bg-white/10 backdrop-blur-[0.2px] text-white cursor-pointer rounded-full hover:bg-white/20 transition-all transform -translate-y-1/2"
+              aria-label="Next slide "
+            >
+              <FaChevronRight size={24} />
+            </button>
+
+            {/* Indicators */}
+            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+              {projects.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => emblaApi?.scrollTo(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    index === selectedIndex
+                      ? "bg-white w-8"
+                      : "bg-white/50 hover:bg-white/80"
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
               ))}
             </div>
           </div>
