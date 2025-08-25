@@ -26,7 +26,7 @@ export const projects = [
     title: "Sandila Digix",
     description:
       "Digital marketing agency website offering branding, SEO, and social media services",
-    imgUrl: "/Images/sandiladigix.png",
+    imgUrl: "/Images/sandiladigix.jpg",
     siteUrl: "https://sandiladigix.com/",
     githubUrl: "https://github.com/muhammadsherazsandila",
     tags: ["Next.js", "React", "Tailwind", "SEO", "Marketing"],
